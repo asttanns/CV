@@ -1,0 +1,40 @@
+name: Build CV PDF
+
+on:
+  push:
+    paths:
+      - '**.tex'
+      - '**.bib'
+      - '**.sty'
+      - '**.cls'
+      - 'figures/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Compile LaTeX (change root_file to your TeX filename)
+      - uses: xu-cheng/latex-action@v3
+        with:
+          root_file: MPSA_CV_AnNisaTriAstuti.tex
+          # If you need Unicode/custom fonts, uncomment one:
+          # latexmk_use_xelatex: true
+          # latexmk_use_lualatex: true
+
+      # Publish PDF to /docs with a stable name served by Pages
+      - name: Copy PDF to docs/
+        run: |
+          mkdir -p docs
+          cp MPSA_CV_AnNisaTriAstuti.pdf docs/AnNisaTriAstuti_CV.pdf
+
+      - name: Commit updated PDF
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: "docs/AnNisaTriAstuti_CV.pdf"
+          message: "Update CV PDF"
