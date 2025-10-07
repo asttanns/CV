@@ -17,24 +17,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      # Compile LaTeX (change root_file to your TeX filename)
-      - uses: xu-cheng/latex-action@v3
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          root_file: MPSA_CV_AnNisaTriAstuti.tex
-          # If you need Unicode/custom fonts, uncomment one:
-          # latexmk_use_xelatex: true
-          # latexmk_use_lualatex: true
+          fetch-depth: 0
 
-      # Publish PDF to /docs with a stable name served by Pages
-      - name: Copy PDF to docs/
+      - name: Compile LaTeX (XeLaTeX)
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: Astuti_CV_MPSA2025.tex   # <-- changed to your actual TeX file
+          latexmk_use_xelatex: true
+
+      - name: Publish PDF to docs/
         run: |
           mkdir -p docs
-          cp MPSA_CV_AnNisaTriAstuti.pdf docs/AnNisaTriAstuti_CV.pdf
+          cp Astuti_CV_MPSA2025.pdf docs/AnNisaTriAstuti_CV.pdf
 
       - name: Commit updated PDF
         uses: EndBug/add-and-commit@v9
         with:
-          add: "docs/AnNisaTriAstuti_CV.pdf"
-          message: "Update CV PDF"
+          add: 'docs/AnNisaTriAstuti_CV.pdf'
+          message: 'Update CV PDF'
+          default_author: github_actions
